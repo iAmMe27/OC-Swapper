@@ -1,0 +1,14 @@
+﻿<Window x:Class="OC_Swapper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OC_Swapper"
+        mc:Ignorable="d"
+        Title="OC Swapper" Height="300" Width="500" Loaded="Window_Loaded">
+    <Grid>
+        <Button Content="Swap to ..." HorizontalAlignment="Center" Margin="0,69,0,0" VerticalAlignment="Top" Height="78" Width="160" Name="BtnSwapBinaries" Click="BtnSwapBinaries_Click"/>
+        <Label Content="Label" HorizontalAlignment="Center" Margin="0,208,0,0" VerticalAlignment="Top" Name="LblCurrentBinaries"/>
+        <Button x:Name="BtnAbout" Content="?" HorizontalAlignment="Left" Margin="35,24,0,0" VerticalAlignment="Top" Width="15" Click="BtnAbout_Click"/>
+    </Grid>
+</Window>
