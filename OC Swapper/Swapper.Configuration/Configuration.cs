@@ -41,7 +41,7 @@ public class Configuration
             OpenVrDllFilePath = "",
             SteamVrStorageFolder = "",
             OpenCompositeStorageFolder = "",
-            LastRuntimeUsed = "0"
+            LastRuntimeUsed = 0
         };
         
         await SaveConfig(config);
@@ -64,8 +64,8 @@ public class SwapperConfig
     public string SteamVrStorageFolder { get; set; } = string.Empty;
         
     [JsonPropertyName("OpenCompositeStorageFolder")]
-    public string OpenCompositeStorageFolder { get; set; } = string.Empty;;
-    
-    [JsonPropertyName("LastUsed")]
-    public string LastRuntimeUsed { get; set; } = string.Empty;
+    public string OpenCompositeStorageFolder { get; set; } = string.Empty;
+
+    [JsonPropertyName("LastUsed")] 
+    public int LastRuntimeUsed { get; set; } = 0;
 }
