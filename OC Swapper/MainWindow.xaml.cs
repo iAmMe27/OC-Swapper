@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -96,6 +97,11 @@ public partial class MainWindow
         OpenCompositeStorageFolder = config?.OpenCompositeStorageFolder;
         LastRuntimeUsed = config?.LastRuntimeUsed;
     }
+
+    private async Task SaveConfig()
+    {
+        
+    }
     
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChange(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -104,16 +110,14 @@ public partial class MainWindow
     {
         try
         {
-            var currentFileHash = Hash.GetFileHash(OpenVrDllFilePath).Result;
-                    
-            if (Equals(SteamFileHash, currentFileHash))
+            var currDll = DllCompare.Compare(OpenVrDllFilePath, SteamFileHash);
+
+            _lastRuntimeUsed = currDll switch
             {
-                _lastRuntimeUsed = 0;
-            }
-            else if (Equals(OpenCompositeFileHash, currentFileHash))
-            {
-                _lastRuntimeUsed = 1;
-            }
+                0 => 0,
+                1 => 1,
+                _ => _lastRuntimeUsed
+            };
         }
         catch (FileNotFoundException)
         {
@@ -140,12 +144,13 @@ public partial class MainWindow
         switch (_lastRuntimeUsed)
         {
             case 0:
-                LblCurrentBinaries.Content = "You are currently using SteamVR binaries";
-                BtnSwapBinaries.Content = "Swap to OpenComposite";
-                break;
-            case 1:
                 LblCurrentBinaries.Content = "You are currently using OpenComposite binaries";
                 BtnSwapBinaries.Content = "Swap to SteamVR";
+                break;
+            case 1:
+                LblCurrentBinaries.Content = "You are currently using SteamVR binaries";
+                BtnSwapBinaries.Content = "Swap to OpenComposite";
+               
                 break;
         }
     }
@@ -155,23 +160,18 @@ public partial class MainWindow
         // double check which binary we have, for sanity’s sake
         try
         {
-            var currentOpenVrFileHash = Hash.GetFileHash(OpenVrDllFilePath).Result;
-            var currentOpenVrType = 0; // 0 for SteamVR files, 1 for OpenComposite files
+            var currDll = DllCompare.Compare(OpenVrDllFilePath, SteamFileHash);
 
-            if (Equals(SteamFileHash, currentOpenVrFileHash))
+            _lastRuntimeUsed = currDll switch
             {
-                // if the strings match, we have the SteamVR file enabled
-                currentOpenVrType = 0;
-            }
-            else if (Equals(OpenCompositeFileHash, currentOpenVrFileHash))
-            {
-                // if the strings match here, we have the OpenComposite file enabled
-                currentOpenVrType = 1;
-            }
+                0 => 0,
+                1 => 1,
+                _ => _lastRuntimeUsed
+            };
 
-            if (currentOpenVrType != _lastRuntimeUsed)
+            if (currDll != _lastRuntimeUsed)
             {
-                MessageBox.Show("WARNING: Something has changed the openvr_api.dll binaries whilst this program has been open! Something might have messed with the file when it shouldn't have.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("WARNING: Something has changed the openvr_api.dll binary whilst this program has been open! Something might have messed with the file when it shouldn't have.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         catch (Exception ex)
@@ -219,6 +219,7 @@ public partial class MainWindow
 
                 break;
         }
+        
         
         UpdateUi();
     }

@@ -27,7 +27,7 @@ public class Configuration
         return config;
     }
 
-    private static async Task SaveConfig(SwapperConfig config)
+    public static async Task SaveConfig(SwapperConfig config)
     {
         await JsonInterface.Write(ConfigFile, config);
     }
