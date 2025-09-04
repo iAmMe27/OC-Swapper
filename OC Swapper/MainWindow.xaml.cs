@@ -5,22 +5,13 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 
-using IniParser;
-using IniParser.Model;
-
 using OC_Swapper.Swapper.Configuration;
 
 namespace OC_Swapper;
 
-public partial class MainWindow : Window
-{       
-    private int CurrentlyUsedBinaries = 0; // 0 = SteamVR files, 1 = OpenComposite files
-
-    IniData ConfigData = new();
-    private readonly string ConfigFile = "config.ini";
-    //private readonly string SteamVRStorageFolder = "SteamVR Files/openvr_api.dll";
-    //private readonly string OpenCompositeStorageFolder = "OpenComposite Files/openvr_api.dll";
-    private string OpenVRDLLFileHash = string.Empty;
+public partial class MainWindow
+{
+    private int _currentlyUsedBinaries; // 0 = SteamVR files, 1 = OpenComposite files
 
     public string? SteamFileHash
     {
@@ -117,17 +108,17 @@ public partial class MainWindow : Window
             // attempt to hash the openvr_api.dll file and work out if its Steam or OpenComposite
             try
             {
-                OpenVRDLLFileHash = GetFileHash(OpenVrDllFilePath);
+                _steamFileHash = GetFileHash(OpenVrDllFilePath);
 
-                if (Equals(SteamFileHash, OpenVRDLLFileHash))
+                if (Equals(SteamFileHash, _steamFileHash))
                 {
                     // if the strings match, we have the SteamVR file enabled
-                    CurrentlyUsedBinaries = 0;
+                    _currentlyUsedBinaries = 0;
                 }
-                else if (Equals(OpenCompositeFileHash, OpenVRDLLFileHash))
+                else if (Equals(OpenCompositeFileHash, _steamFileHash))
                 {
                     // if the strings match here, we have the OpenComposite file enabled
-                    CurrentlyUsedBinaries = 1;
+                    _currentlyUsedBinaries = 1;
                 }
             }
             catch (FileNotFoundException)
@@ -136,18 +127,18 @@ public partial class MainWindow : Window
                 try
                 {
                     // then copy in the OpenComposite file
-                    File.Copy(SteamVrStorageFolder, OpenVrDllFilePath);
+                    File.Copy(SteamVrStorageFolder ?? string.Empty, OpenVrDllFilePath ?? string.Empty);
 
-                    CurrentlyUsedBinaries = 0;
+                    _currentlyUsedBinaries = 0;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error moving the openvr_api.dll file: " + ex.Message.ToString());
+                    MessageBox.Show("Error moving the openvr_api.dll file: " + ex.Message);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error hashing openvr_api.dll file: " + ex.Message.ToString());
+                MessageBox.Show("Error hashing openvr_api.dll file: " + ex.Message);
             }
             
             UpdateUi();
@@ -155,7 +146,7 @@ public partial class MainWindow : Window
 
     private void UpdateUi()
     {
-        switch (CurrentlyUsedBinaries)
+        switch (_currentlyUsedBinaries)
         {
             case 0:
                 LblCurrentBinaries.Content = "You are currently using SteamVR binaries";
@@ -171,7 +162,7 @@ public partial class MainWindow : Window
     private static string GetFileHash(string? filePath)
     {
         using var md5 = MD5.Create();
-        using var stream = File.OpenRead(filePath);
+        using var stream = File.OpenRead(filePath ?? string.Empty);
         var hash = md5.ComputeHash(stream);
         
         return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
@@ -196,50 +187,55 @@ public partial class MainWindow : Window
                 currentOpenVrType = 1;
             }
 
-            if (currentOpenVrType != CurrentlyUsedBinaries)
+            if (currentOpenVrType != _currentlyUsedBinaries)
             {
                 MessageBox.Show("WARNNING: Something has changed the openvr_api.dll binaries whilst this program has been open! Something might have messed with the file when it shouldn't have.", "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error verifying the current openvr_api.dll file: " + ex.Message.ToString());
+            MessageBox.Show("Error verifying the current openvr_api.dll file: " + ex.Message);
         }
 
-        // move files as necessary
-        if (CurrentlyUsedBinaries == 0) // SteamVR files
+        switch (_currentlyUsedBinaries)
         {
-            try
-            {
-                // remove current file
-                File.Delete(OpenVrDllFilePath);
+            // move files as necessary
+            // SteamVR files
+            case 0:
+                try
+                {
+                    // remove current file
+                    File.Delete(OpenVrDllFilePath ?? throw new InvalidOperationException());
 
-                // then copy in the OpenComposite file
-                File.Copy(OpenCompositeStorageFolder, OpenVrDllFilePath);
+                    // then copy in the OpenComposite file
+                    File.Copy(OpenCompositeStorageFolder ?? throw new InvalidOperationException(), OpenVrDllFilePath);
 
-                CurrentlyUsedBinaries = 1;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error moving the openvr_api.dll file: " + ex.Message.ToString());
-            }
-        }
-        else if (CurrentlyUsedBinaries == 1) // OpenComposite files
-        {
-            try
-            {
-                // remove current file
-                File.Delete(OpenVrDllFilePath);
+                    _currentlyUsedBinaries = 1;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error moving the openvr_api.dll file: " + ex.Message);
+                }
 
-                // then copy in the OpenComposite file
-                File.Copy(SteamVrStorageFolder, OpenVrDllFilePath);
+                break;
+            // OpenComposite files
+            case 1:
+                try
+                {
+                    // remove current file
+                    File.Delete(OpenVrDllFilePath ?? throw new InvalidOperationException());
 
-                CurrentlyUsedBinaries = 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error moving the openvr_api.dll file: " + ex.Message.ToString());
-            }
+                    // then copy in the OpenComposite file
+                    File.Copy(SteamVrStorageFolder ?? throw new InvalidOperationException(), OpenVrDllFilePath);
+
+                    _currentlyUsedBinaries = 0;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error moving the openvr_api.dll file: " + ex.Message);
+                }
+
+                break;
         }
 
         UpdateUi();
