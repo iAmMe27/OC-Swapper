@@ -6,7 +6,7 @@ using OC_Swapper.Swapper.Json;
 
 namespace OC_Swapper.Swapper.Configuration;
 
-public class Configuration
+public static class Configuration
 {
     private const string ConfigFile = "config.json";
 
@@ -21,7 +21,7 @@ public class Configuration
         catch (Exception)
         {
             config = await CreateNewSettings();
-            MessageBox.Show("Could not read configuration file, a new one has been created. You will need to populate it with the correct settings");
+            MessageBox.Show("Could not read configuration file, a new one has been created. You will need to populate it with the correct settings.");
         }
 
         return config;

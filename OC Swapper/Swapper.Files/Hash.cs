@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace OC_Swapper.Swapper.Files;
 
-public class Hash
+public static class Hash
 {
     public static async Task<string?> GetFileHash(string? filePath)
     {

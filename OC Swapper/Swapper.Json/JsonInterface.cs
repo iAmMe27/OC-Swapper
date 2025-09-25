@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OC_Swapper.Swapper.Json;
 
-public class JsonInterface
+public static class JsonInterface
 {
     public static async Task<T?> Read<T>(string filename)
     {
