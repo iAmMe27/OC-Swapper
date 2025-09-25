@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -100,7 +99,17 @@ public partial class MainWindow
 
     private async Task SaveConfig()
     {
-        
+        SwapperConfig config = new()
+        {
+            SteamFileHash = _steamFileHash ?? "",
+            OpenCompositeFileHash = _openCompositeFileHash,
+            OpenVrDllFilePath = _openVrDllFilePath,
+            SteamVrStorageFolder = _steamVrStorageFolder,
+            OpenCompositeStorageFolder = _openCompositeStorageFolder,
+            LastRuntimeUsed = _lastRuntimeUsed ?? 0
+        };
+
+        await Configuration.SaveConfig(config);
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -219,8 +228,8 @@ public partial class MainWindow
 
                 break;
         }
-        
-        
+
+        _ = SaveConfig();
         UpdateUi();
     }
 
