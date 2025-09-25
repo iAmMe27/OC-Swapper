@@ -20,7 +20,24 @@ public static class Configuration
         }
         catch (Exception)
         {
-            config = await CreateNewSettings();
+            config = await CreateNewSettingsAsync();
+            MessageBox.Show("Could not read configuration file, a new one has been created. You will need to populate it with the correct settings.");
+        }
+
+        return config;
+    }
+
+    public static SwapperConfig? LoadConfig()
+    {
+        SwapperConfig? config;
+        
+        try
+        {
+            config =  JsonInterface.Read<SwapperConfig>(ConfigFile);
+        }
+        catch (Exception)
+        {
+            config = CreateNewSettings();
             MessageBox.Show("Could not read configuration file, a new one has been created. You will need to populate it with the correct settings.");
         }
 
@@ -31,8 +48,13 @@ public static class Configuration
     {
         await JsonInterface.WriteAsync(ConfigFile, config);
     }
+    
+    public static void SaveConfig(SwapperConfig config)
+    {
+        JsonInterface.Write(ConfigFile, config);
+    }
 
-    private static async Task<SwapperConfig> CreateNewSettings()
+    private static async Task<SwapperConfig> CreateNewSettingsAsync()
     {
         SwapperConfig config = new()
         {
@@ -45,6 +67,22 @@ public static class Configuration
         };
         
         await SaveConfigAsync(config);
+        return config;
+    }
+    
+    private static SwapperConfig CreateNewSettings()
+    {
+        SwapperConfig config = new()
+        {
+            SteamFileHash = "",
+            OpenCompositeFileHash = "",
+            OpenVrDllFilePath = "",
+            SteamVrStorageFolder = "",
+            OpenCompositeStorageFolder = "",
+            LastRuntimeUsed = 0
+        };
+        
+        SaveConfig(config);
         return config;
     }
 }
