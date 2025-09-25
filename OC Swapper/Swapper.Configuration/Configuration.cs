@@ -10,13 +10,13 @@ public static class Configuration
 {
     private const string ConfigFile = "config.json";
 
-    public static async Task<SwapperConfig?> LoadConfig()
+    public static async Task<SwapperConfig?> LoadConfigAsync()
     {
         SwapperConfig? config;
 
         try
         {
-            config = await JsonInterface.Read<SwapperConfig>(ConfigFile);
+            config = await JsonInterface.ReadAsync<SwapperConfig>(ConfigFile);
         }
         catch (Exception)
         {
@@ -27,9 +27,9 @@ public static class Configuration
         return config;
     }
 
-    public static async Task SaveConfig(SwapperConfig config)
+    public static async Task SaveConfigAsync(SwapperConfig config)
     {
-        await JsonInterface.Write(ConfigFile, config);
+        await JsonInterface.WriteAsync(ConfigFile, config);
     }
 
     private static async Task<SwapperConfig> CreateNewSettings()
@@ -44,7 +44,7 @@ public static class Configuration
             LastRuntimeUsed = 0
         };
         
-        await SaveConfig(config);
+        await SaveConfigAsync(config);
         return config;
     }
 }

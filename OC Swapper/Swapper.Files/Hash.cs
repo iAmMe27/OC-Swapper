@@ -16,7 +16,8 @@ public static class Hash
             await using var stream = File.OpenRead(filePath ?? throw new InvalidOperationException());
             var hash = await md5.ComputeHashAsync(stream);
 
-            return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            //return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            return Convert.ToHexStringLower(hash).Replace("-", "");
         }
         catch (Exception ex) 
         {

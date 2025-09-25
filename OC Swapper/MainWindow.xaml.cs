@@ -82,12 +82,12 @@ public partial class MainWindow
     {
         InitializeComponent();
 
-        _ = SettingsInitialiser();
+        //_ = SettingsInitialiser();
     }
     
     private async Task SettingsInitialiser()
     {
-        var config = await Configuration.LoadConfig();
+        var config = await Configuration.LoadConfigAsync();
         
         SteamFileHash = config?.SteamFileHash;
         OpenCompositeFileHash = config?.OpenCompositeFileHash;
@@ -109,7 +109,7 @@ public partial class MainWindow
             LastRuntimeUsed = _lastRuntimeUsed ?? 0
         };
 
-        await Configuration.SaveConfig(config);
+        await Configuration.SaveConfigAsync(config);
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -117,9 +117,11 @@ public partial class MainWindow
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        _ = SettingsInitialiser();
+        
         try
         {
-            var currDll = DllCompare.Compare(OpenVrDllFilePath, SteamFileHash);
+            var currDll = DllCompare.Compare(_openVrDllFilePath, _steamFileHash);
 
             _lastRuntimeUsed = currDll switch
             {
@@ -132,7 +134,8 @@ public partial class MainWindow
         {
             try
             {
-                File.Copy(SteamVrStorageFolder ?? throw new InvalidOperationException(), OpenVrDllFilePath ?? throw new InvalidOperationException());
+                File.Copy(SteamVrStorageFolder ?? throw new InvalidOperationException(),
+                    OpenVrDllFilePath ?? throw new InvalidOperationException());
                 _lastRuntimeUsed = 0;
             }
             catch (Exception ex)
@@ -144,7 +147,7 @@ public partial class MainWindow
         {
             MessageBox.Show("Error hashing openvr_api.dll file: " + ex.Message);
         }
-            
+
         UpdateUi();
     }
 
