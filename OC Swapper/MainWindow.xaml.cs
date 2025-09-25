@@ -85,9 +85,9 @@ public partial class MainWindow
         //_ = SettingsInitialiser();
     }
     
-    private async Task SettingsInitialiser()
+    private void SettingsInitialiser()
     {
-        var config = await Configuration.LoadConfigAsync();
+        var config = Configuration.LoadConfig();
         
         SteamFileHash = config?.SteamFileHash;
         OpenCompositeFileHash = config?.OpenCompositeFileHash;
@@ -117,7 +117,7 @@ public partial class MainWindow
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        _ = SettingsInitialiser();
+        SettingsInitialiser();
         
         try
         {
