@@ -121,10 +121,11 @@ public partial class MainWindow
         
         try
         {
-            var currDll = DllCompare.Compare(_openVrDllFilePath, _steamFileHash);
+            var currDll = DllCompare.Compare(AppContext.BaseDirectory + "\\" + _openVrDllFilePath, _steamFileHash);
 
             _lastRuntimeUsed = currDll switch
             {
+                -1 => throw new FileNotFoundException(),
                 0 => 0,
                 1 => 1,
                 _ => _lastRuntimeUsed
@@ -172,7 +173,7 @@ public partial class MainWindow
         // double check which binary we have, for sanity’s sake
         try
         {
-            var currDll = DllCompare.Compare(OpenVrDllFilePath, SteamFileHash);
+            var currDll = DllCompare.Compare(AppContext.BaseDirectory + "\\" + _openVrDllFilePath, SteamFileHash);
 
             _lastRuntimeUsed = currDll switch
             {

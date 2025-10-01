@@ -8,21 +8,21 @@ namespace OC_Swapper.Swapper.Files;
 
 public static class Hash
 {
-    public static async Task<string?> GetFileHash(string? filePath)
+    public static string GetFileHash(string? filePath)
     {
         try
         {
             using var md5 = MD5.Create();
-            await using var stream = File.OpenRead(filePath ?? throw new InvalidOperationException());
-            var hash = await md5.ComputeHashAsync(stream);
+            using var stream = File.OpenRead(filePath ?? throw new InvalidOperationException());
+            var hash = md5.ComputeHash(stream);
 
             //return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
             return Convert.ToHexStringLower(hash).Replace("-", "");
         }
         catch (Exception ex) 
         {
-            MessageBox.Show("Error hashing file: " + ex.Message);
-            return null;
+            MessageBox.Show("[HASH] Error hashing file: " + ex.Message);
+            return string.Empty;
         }
     }
 }
