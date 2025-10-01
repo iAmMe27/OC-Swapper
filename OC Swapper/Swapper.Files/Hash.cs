@@ -21,7 +21,7 @@ public static class Hash
         }
         catch (Exception ex) 
         {
-            MessageBox.Show("[HASH] Error hashing file: " + ex.Message);
+            //MessageBox.Show("[HASH] Error hashing file: " + ex.Message);
             return string.Empty;
         }
     }

@@ -81,8 +81,6 @@ public partial class MainWindow
     public MainWindow()
     {
         InitializeComponent();
-
-        //_ = SettingsInitialiser();
     }
     
     private void SettingsInitialiser()
@@ -135,8 +133,7 @@ public partial class MainWindow
         {
             try
             {
-                File.Copy(SteamVrStorageFolder ?? throw new InvalidOperationException(),
-                    OpenVrDllFilePath ?? throw new InvalidOperationException());
+                File.Copy(AppContext.BaseDirectory + "\\" + SteamVrStorageFolder + "\\openvr.dll",AppContext.BaseDirectory + "\\" + OpenVrDllFilePath);
                 _lastRuntimeUsed = 0;
             }
             catch (Exception ex)
@@ -200,10 +197,10 @@ public partial class MainWindow
                 try
                 {
                     // remove current file
-                    File.Delete(OpenVrDllFilePath ?? throw new InvalidOperationException());
+                    File.Delete(_openVrDllFilePath);
 
                     // then copy in the OpenComposite file
-                    File.Copy(OpenCompositeStorageFolder ?? throw new InvalidOperationException(), OpenVrDllFilePath);
+                    File.Copy(OpenCompositeStorageFolder + "\\openvr.dll", _openVrDllFilePath);
 
                     _lastRuntimeUsed = 1;
                 }
@@ -218,10 +215,10 @@ public partial class MainWindow
                 try
                 {
                     // remove current file
-                    File.Delete(OpenVrDllFilePath ?? throw new InvalidOperationException());
+                    File.Delete(_openVrDllFilePath);
 
                     // then copy in the OpenComposite file
-                    File.Copy(SteamVrStorageFolder ?? throw new InvalidOperationException(), OpenVrDllFilePath);
+                    File.Copy(SteamVrStorageFolder + "\\openvr.dll", _openVrDllFilePath);
 
                     _lastRuntimeUsed = 0;
                 }
