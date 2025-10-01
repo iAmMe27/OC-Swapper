@@ -66,7 +66,7 @@ public partial class MainWindow
         get => _lastRuntimeUsed;
         set
         {
-            _lastRuntimeUsed = value ?? 0;
+            _lastRuntimeUsed = value ?? -1;
             OnPropertyChange(nameof(LastRuntimeUsed));
         }
     }
@@ -95,7 +95,7 @@ public partial class MainWindow
         LastRuntimeUsed = config?.LastRuntimeUsed;
     }
 
-    private async Task SaveConfig()
+    private void SaveConfig()
     {
         SwapperConfig config = new()
         {
@@ -107,7 +107,7 @@ public partial class MainWindow
             LastRuntimeUsed = _lastRuntimeUsed ?? 0
         };
 
-        await Configuration.SaveConfigAsync(config);
+        Configuration.SaveConfig(config);
     }
     
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -160,7 +160,6 @@ public partial class MainWindow
             case 1:
                 LblCurrentBinaries.Content = "You are currently using SteamVR binaries";
                 BtnSwapBinaries.Content = "Swap to OpenComposite";
-               
                 break;
         }
     }
@@ -174,6 +173,7 @@ public partial class MainWindow
 
             _lastRuntimeUsed = currDll switch
             {
+                -1 => throw new FileNotFoundException(),
                 0 => 0,
                 1 => 1,
                 _ => _lastRuntimeUsed
@@ -196,11 +196,8 @@ public partial class MainWindow
             case 0:
                 try
                 {
-                    // remove current file
-                    File.Delete(_openVrDllFilePath);
-
-                    // then copy in the OpenComposite file
-                    File.Copy(OpenCompositeStorageFolder + "\\openvr.dll", _openVrDllFilePath);
+                    // copy in the OpenComposite file, last variable allows for overwrite
+                    File.Copy(OpenCompositeStorageFolder + "\\openvr.dll", _openVrDllFilePath, true);
 
                     _lastRuntimeUsed = 1;
                 }
@@ -214,11 +211,8 @@ public partial class MainWindow
             case 1:
                 try
                 {
-                    // remove current file
-                    File.Delete(_openVrDllFilePath);
-
-                    // then copy in the OpenComposite file
-                    File.Copy(SteamVrStorageFolder + "\\openvr.dll", _openVrDllFilePath);
+                    // copy in the SteamVR file, last variable allows for overwrite
+                    File.Copy(SteamVrStorageFolder + "\\openvr.dll", _openVrDllFilePath, true);
 
                     _lastRuntimeUsed = 0;
                 }
@@ -230,7 +224,7 @@ public partial class MainWindow
                 break;
         }
 
-        _ = SaveConfig();
+        SaveConfig();
         UpdateUi();
     }
 
