@@ -106,4 +106,7 @@ public class SwapperConfig
 
     [JsonPropertyName("LastUsed")] 
     public int LastRuntimeUsed { get; set; } = 0;
+    
+    [JsonPropertyName("AuthorWindowAvailable")]
+    public int AuthorWindowAvailable { get; set; } = 0;
 }

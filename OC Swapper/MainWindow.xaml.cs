@@ -69,6 +69,16 @@ public partial class MainWindow
             OnPropertyChange(nameof(LastRuntimeUsed));
         }
     }
+
+    public int? AuthorWindowAvailable
+    {
+        get => _authorWindowAvailable;
+        set
+        {
+            _authorWindowAvailable = value ?? -1;
+            OnPropertyChange(nameof(_authorWindowAvailable));
+        }
+    }
     
     private string _steamFileHash = string.Empty;
     private string _openCompositeFileHash = string.Empty;
@@ -76,6 +86,7 @@ public partial class MainWindow
     private string _steamVrStorageFolder = string.Empty;
     private string _openCompositeStorageFolder = string.Empty;
     private int? _lastRuntimeUsed = 0;
+    private int? _authorWindowAvailable = 0;
 
     private const string DllFileName = "openvr_api.dll";
 
@@ -94,6 +105,7 @@ public partial class MainWindow
         SteamVrStorageFolder = Path.Combine(AppContext.BaseDirectory, config!.SteamVrStorageFolder, DllFileName);
         OpenCompositeStorageFolder = Path.Combine(AppContext.BaseDirectory, config!.OpenCompositeStorageFolder, DllFileName);
         LastRuntimeUsed = config?.LastRuntimeUsed;
+        AuthorWindowAvailable = config?.AuthorWindowAvailable;
     }
 
     private void SaveConfig()
@@ -234,7 +246,20 @@ public partial class MainWindow
 
     private void BtnAuthorSettings_Click(object sender, RoutedEventArgs e)
     {
-        var AuthorSettingsWindow = new AuthorSettings();
-        AuthorSettingsWindow.ShowDialog();
+        var authorSettingsWindow = new AuthorSettings
+        {
+            Config = new SwapperConfig()
+            {
+                SteamFileHash = _steamFileHash,
+                OpenCompositeFileHash = _openCompositeFileHash,
+                OpenVrDllFilePath = _openVrDllFilePath,
+                SteamVrStorageFolder = _steamVrStorageFolder,
+                OpenCompositeStorageFolder = _openCompositeStorageFolder,
+                LastRuntimeUsed = _lastRuntimeUsed ?? 0,
+                AuthorWindowAvailable = _authorWindowAvailable ?? 0
+            }
+        };
+
+        authorSettingsWindow.ShowDialog();
     }
 }
