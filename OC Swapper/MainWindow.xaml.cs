@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 
 using OC_Swapper.Swapper.Configuration;
@@ -71,12 +70,14 @@ public partial class MainWindow
         }
     }
     
-    private string? _steamFileHash = string.Empty;
+    private string _steamFileHash = string.Empty;
     private string _openCompositeFileHash = string.Empty;
     private string _openVrDllFilePath = string.Empty;
     private string _steamVrStorageFolder = string.Empty;
     private string _openCompositeStorageFolder = string.Empty;
     private int? _lastRuntimeUsed = 0;
+
+    private const string DllFileName = "openvr_api.dll";
 
     public MainWindow()
     {
@@ -89,22 +90,20 @@ public partial class MainWindow
         
         SteamFileHash = config?.SteamFileHash;
         OpenCompositeFileHash = config?.OpenCompositeFileHash;
-        OpenVrDllFilePath = config?.OpenVrDllFilePath;
-        SteamVrStorageFolder = config?.SteamVrStorageFolder;
-        OpenCompositeStorageFolder = config?.OpenCompositeStorageFolder;
+        OpenVrDllFilePath = Path.Combine(AppContext.BaseDirectory, config!.OpenVrDllFilePath);
+        SteamVrStorageFolder = Path.Combine(AppContext.BaseDirectory, config!.SteamVrStorageFolder, DllFileName);
+        OpenCompositeStorageFolder = Path.Combine(AppContext.BaseDirectory, config!.OpenCompositeStorageFolder, DllFileName);
         LastRuntimeUsed = config?.LastRuntimeUsed;
     }
 
     private void SaveConfig()
     {
+        // Only save the last used runtime as the rest of the config is not written 
+        // inside the program, only read
+        
         SwapperConfig config = new()
         {
-            SteamFileHash = _steamFileHash ?? "",
-            OpenCompositeFileHash = _openCompositeFileHash,
-            OpenVrDllFilePath = _openVrDllFilePath,
-            SteamVrStorageFolder = _steamVrStorageFolder,
-            OpenCompositeStorageFolder = _openCompositeStorageFolder,
-            LastRuntimeUsed = _lastRuntimeUsed ?? 0
+            LastRuntimeUsed = _lastRuntimeUsed ?? -1
         };
 
         Configuration.SaveConfig(config);
@@ -119,7 +118,7 @@ public partial class MainWindow
         
         try
         {
-            var currDll = DllCompare.Compare(AppContext.BaseDirectory + "\\" + _openVrDllFilePath, _steamFileHash);
+            var currDll = DllCompare.Compare(_openVrDllFilePath, _steamFileHash);
 
             _lastRuntimeUsed = currDll switch
             {
@@ -133,7 +132,7 @@ public partial class MainWindow
         {
             try
             {
-                File.Copy(AppContext.BaseDirectory + "\\" + SteamVrStorageFolder + "\\openvr.dll",AppContext.BaseDirectory + "\\" + OpenVrDllFilePath);
+                File.Copy(_steamVrStorageFolder, _openVrDllFilePath);
                 _lastRuntimeUsed = 0;
             }
             catch (Exception ex)
@@ -169,7 +168,7 @@ public partial class MainWindow
         // double check which binary we have, for sanity’s sake
         try
         {
-            var currDll = DllCompare.Compare(AppContext.BaseDirectory + "\\" + _openVrDllFilePath, SteamFileHash);
+            var currDll = DllCompare.Compare(_openVrDllFilePath, _steamFileHash);
 
             _lastRuntimeUsed = currDll switch
             {
@@ -197,7 +196,7 @@ public partial class MainWindow
                 try
                 {
                     // copy in the OpenComposite file, last variable allows for overwrite
-                    File.Copy(OpenCompositeStorageFolder + "\\openvr.dll", _openVrDllFilePath, true);
+                    File.Copy(_openCompositeStorageFolder, _openVrDllFilePath, true);
 
                     _lastRuntimeUsed = 1;
                 }
@@ -212,7 +211,7 @@ public partial class MainWindow
                 try
                 {
                     // copy in the SteamVR file, last variable allows for overwrite
-                    File.Copy(SteamVrStorageFolder + "\\openvr.dll", _openVrDllFilePath, true);
+                    File.Copy(_steamVrStorageFolder, _openVrDllFilePath, true);
 
                     _lastRuntimeUsed = 0;
                 }
@@ -231,5 +230,11 @@ public partial class MainWindow
     private void BtnAbout_Click(object sender, RoutedEventArgs e)
     {
         MessageBox.Show("OC Swapper - a tool by iAmMe\n\nOC Swapper offers a single click solution for swapping between SteamVR DLL binary and OpenComposite DLL binary for Skyrim VR setups", "About OC Swapper");
+    }
+
+    private void BtnAuthorSettings_Click(object sender, RoutedEventArgs e)
+    {
+        var AuthorSettingsWindow = new AuthorSettings();
+        AuthorSettingsWindow.ShowDialog();
     }
 }

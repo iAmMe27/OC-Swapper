@@ -10,5 +10,6 @@
         <Button Content="Swap to ..." HorizontalAlignment="Center" Margin="0,69,0,0" VerticalAlignment="Top" Height="78" Width="160" Name="BtnSwapBinaries" Click="BtnSwapBinaries_Click"/>
         <Label Content="Label" HorizontalAlignment="Center" Margin="0,208,0,0" VerticalAlignment="Top" Name="LblCurrentBinaries"/>
         <Button x:Name="BtnAbout" Content="?" HorizontalAlignment="Left" Margin="35,24,0,0" VerticalAlignment="Top" Width="15" Click="BtnAbout_Click"/>
+        <Button x:Name="BtnAuthorSettings" Content="Author Settings" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Width="100" Click="BtnAuthorSettings_Click"/>
     </Grid>
 </Window>
