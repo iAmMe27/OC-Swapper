@@ -102,10 +102,10 @@ public partial class MainWindow
         SteamFileHash = config?.SteamFileHash;
         OpenCompositeFileHash = config?.OpenCompositeFileHash;
         OpenVrDllFilePath = Path.Combine(AppContext.BaseDirectory, config!.OpenVrDllFilePath);
-        SteamVrStorageFolder = Path.Combine(AppContext.BaseDirectory, config!.SteamVrStorageFolder, DllFileName);
-        OpenCompositeStorageFolder = Path.Combine(AppContext.BaseDirectory, config!.OpenCompositeStorageFolder, DllFileName);
-        LastRuntimeUsed = config?.LastRuntimeUsed;
-        AuthorWindowAvailable = config?.AuthorWindowAvailable;
+        SteamVrStorageFolder = Path.Combine(AppContext.BaseDirectory, config.SteamVrStorageFolder, DllFileName);
+        OpenCompositeStorageFolder = Path.Combine(AppContext.BaseDirectory, config.OpenCompositeStorageFolder, DllFileName);
+        LastRuntimeUsed = config.LastRuntimeUsed;
+        AuthorWindowAvailable = config.AuthorWindowAvailable;
     }
 
     private void SaveConfig()
