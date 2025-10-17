@@ -135,6 +135,9 @@ public partial class MainWindow
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         SettingsInitialiser();
+
+        if (_authorWindowAvailable == 0)
+            BtnAuthorSettings.Visibility = Visibility.Hidden;
         
         try
         {
