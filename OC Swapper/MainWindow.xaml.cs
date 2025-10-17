@@ -89,6 +89,9 @@ public partial class MainWindow
     private int? _authorWindowAvailable = 0;
 
     private const string DllFileName = "openvr_api.dll";
+    
+    private string _openCompositeFilePath = string.Empty;
+    private string _steamVrFilePath = string.Empty;
 
     public MainWindow()
     {
@@ -106,6 +109,9 @@ public partial class MainWindow
         OpenCompositeStorageFolder = config.OpenCompositeStorageFolder;
         LastRuntimeUsed = config.LastRuntimeUsed;
         AuthorWindowAvailable = config.AuthorWindowAvailable;
+        
+        _openCompositeFilePath = Path.Combine(_openCompositeStorageFolder, DllFileName);
+        _steamVrFilePath = Path.Combine(_steamVrStorageFolder, DllFileName);
     }
 
     private void SaveConfig()
@@ -144,7 +150,7 @@ public partial class MainWindow
         {
             try
             {
-                File.Copy(_steamVrStorageFolder, _openVrDllFilePath);
+                File.Copy(_steamVrFilePath, _openVrDllFilePath);
                 _lastRuntimeUsed = 0;
             }
             catch (Exception ex)
@@ -209,8 +215,8 @@ public partial class MainWindow
             case 0:
                 try
                 {
-                    // copy in the OpenComposite file, last variable allows for overwrite
-                    File.Copy(_openCompositeStorageFolder, _openVrDllFilePath, true);
+                    // copy in the SteamVR file, last variable allows for overwrite
+                    File.Copy(_steamVrFilePath, _openVrDllFilePath, true);
 
                     _lastRuntimeUsed = 1;
                 }
@@ -224,9 +230,9 @@ public partial class MainWindow
             case 1:
                 try
                 {
-                    // copy in the SteamVR file, last variable allows for overwrite
-                    File.Copy(_steamVrStorageFolder, _openVrDllFilePath, true);
-
+                    // copy in the OpenComposite file, last variable allows for overwrite
+                    File.Copy(_openCompositeFilePath, _openVrDllFilePath, true);
+                    
                     _lastRuntimeUsed = 0;
                 }
                 catch (Exception ex)
