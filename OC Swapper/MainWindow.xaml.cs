@@ -159,7 +159,9 @@ public partial class MainWindow
 
         UpdateUi();
     }
-
+    
+    // Instead of doing crap like this, I should really be using WPF XML bindings
+    // TODO: use WPF XML bindings dang it
     private void UpdateUi()
     {
         switch (_lastRuntimeUsed)
