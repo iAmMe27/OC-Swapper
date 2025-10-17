@@ -16,12 +16,10 @@ public static class Hash
             using var stream = File.OpenRead(filePath ?? throw new InvalidOperationException());
             var hash = md5.ComputeHash(stream);
 
-            //return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
             return Convert.ToHexStringLower(hash).Replace("-", "");
         }
-        catch (Exception ex) 
+        catch (Exception) 
         {
-            //MessageBox.Show("[HASH] Error hashing file: " + ex.Message);
             return string.Empty;
         }
     }

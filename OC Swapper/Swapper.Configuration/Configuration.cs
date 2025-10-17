@@ -2,6 +2,7 @@ using System;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
+
 using OC_Swapper.Swapper.Json;
 
 namespace OC_Swapper.Swapper.Configuration;
@@ -44,7 +45,7 @@ public static class Configuration
         return config;
     }
 
-    public static async Task SaveConfigAsync(SwapperConfig config)
+    private static async Task SaveConfigAsync(SwapperConfig config)
     {
         await JsonInterface.WriteAsync(ConfigFile, config);
     }
@@ -90,12 +91,12 @@ public static class Configuration
 public class SwapperConfig
 {
     [JsonPropertyName("SteamFileHash")]
-    public string SteamFileHash { get; set; } = string.Empty;
+    public string SteamFileHash { get; init; } = string.Empty;
         
     [JsonPropertyName("OpenCompositeFileHash")]
-    public string OpenCompositeFileHash { get; set; } = string.Empty;
+    public string OpenCompositeFileHash { get; init; } = string.Empty;
         
-    [JsonPropertyName("OpenVRDLLFilePath")]
+    [JsonPropertyName("OpenVRDllFilePath")]
     public string OpenVrDllFilePath { get; set; } = string.Empty;
 
     [JsonPropertyName("SteamVRStorageFolder")]
@@ -105,8 +106,8 @@ public class SwapperConfig
     public string OpenCompositeStorageFolder { get; set; } = string.Empty;
 
     [JsonPropertyName("LastUsed")] 
-    public int LastRuntimeUsed { get; set; } = 0;
+    public int LastRuntimeUsed { get; init; }
     
     [JsonPropertyName("AuthorWindowAvailable")]
-    public int AuthorWindowAvailable { get; set; } = 0;
+    public int AuthorWindowAvailable { get; init; }
 }
