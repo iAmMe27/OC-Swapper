@@ -39,4 +39,41 @@ public partial class AuthorSettings : Window
 
         return openFileDialog.FileName;
     }
+
+    public string ShowFolderDialog(string initialDirectory)
+    {
+        var openFolderDialog = new OpenFolderDialog
+        {
+            InitialDirectory = initialDirectory
+        };
+
+        return openFolderDialog.FolderName;
+    }
+
+    private void BtnOpenCompositeFileLocation_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (Config != null)
+        {
+            Config.OpenCompositeStorageFolder = ShowFolderDialog(Config.OpenCompositeStorageFolder);
+            TxtOpenCompositeStorageFolder.Text = Config.OpenCompositeStorageFolder;
+        }
+    }
+
+    private void BtnSteamVrStorageFolder_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (Config != null)
+        {
+            Config.SteamVrStorageFolder = ShowFolderDialog(Config.SteamVrStorageFolder);
+            TxtSteamVrStorageFolder.Text = Config.SteamVrStorageFolder;
+        }
+    }
+
+    private void BtnOpenVrDllFilePath_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (Config != null)
+        {
+            Config.OpenVrDllFilePath = ShowFileDialog(Config.OpenVrDllFilePath, "openvr_api.dll (openvr_api.dll)|openvr_api.dll");
+            TxtOpenVrDllFilePath.Text = Config.OpenVrDllFilePath;
+        }
+    }
 }

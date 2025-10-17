@@ -16,9 +16,9 @@
         <TextBox x:Name="TxtSteamVrStorageFolder" HorizontalAlignment="Left" Margin="187,140,0,0" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Width="250" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
         <Label Content="Path to DLL to swap:" HorizontalAlignment="Left" Margin="64,135,0,0" VerticalAlignment="Top"/>
        
-        <Button x:Name="BtnOpenCompositeFileLocation" Content="Select" HorizontalAlignment="Left" Margin="442,20,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="BtnSteamVrStorageFolder" Content="Select" HorizontalAlignment="Left" Margin="442,80,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="BtnOpenVrDllFilePath" Content="Select" HorizontalAlignment="Left" Margin="442,140,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="BtnOpenCompositeFileLocation" Content="Select" HorizontalAlignment="Left" Margin="442,20,0,0" VerticalAlignment="Top" Click="BtnOpenCompositeFileLocation_OnClick"/>
+        <Button x:Name="BtnSteamVrStorageFolder" Content="Select" HorizontalAlignment="Left" Margin="442,80,0,0" VerticalAlignment="Top" Click="BtnSteamVrStorageFolder_OnClick"/>
+        <Button x:Name="BtnOpenVrDllFilePath" Content="Select" HorizontalAlignment="Left" Margin="442,140,0,0" VerticalAlignment="Top" Click="BtnOpenVrDllFilePath_OnClick"/>
 
     </Grid>
 </Window>
