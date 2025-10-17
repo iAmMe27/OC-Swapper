@@ -29,51 +29,47 @@ public partial class AuthorSettings : Window
         TxtOpenVrDllFilePath.ScrollToEnd();
     }
 
-    public string ShowFileDialog(string initialDirectory, string filter)
+    private static string ShowFileDialog(string initialDirectory, string filter)
     {
         var openFileDialog = new OpenFileDialog
         {
             InitialDirectory = initialDirectory,
             Filter = filter
         };
-
+    
+        openFileDialog.ShowDialog();
         return openFileDialog.FileName;
     }
 
-    public string ShowFolderDialog(string initialDirectory)
+    private static string ShowFolderDialog(string initialDirectory)
     {
         var openFolderDialog = new OpenFolderDialog
         {
             InitialDirectory = initialDirectory
         };
-
+        
+        openFolderDialog.ShowDialog();
         return openFolderDialog.FolderName;
     }
 
     private void BtnOpenCompositeFileLocation_OnClick(object sender, RoutedEventArgs e)
     {
-        if (Config != null)
-        {
-            Config.OpenCompositeStorageFolder = ShowFolderDialog(Config.OpenCompositeStorageFolder);
-            TxtOpenCompositeStorageFolder.Text = Config.OpenCompositeStorageFolder;
-        }
+        if (Config == null) return;
+        Config.OpenCompositeStorageFolder = ShowFolderDialog(Config.OpenCompositeStorageFolder);
+        TxtOpenCompositeStorageFolder.Text = Config.OpenCompositeStorageFolder;
     }
 
     private void BtnSteamVrStorageFolder_OnClick(object sender, RoutedEventArgs e)
     {
-        if (Config != null)
-        {
-            Config.SteamVrStorageFolder = ShowFolderDialog(Config.SteamVrStorageFolder);
-            TxtSteamVrStorageFolder.Text = Config.SteamVrStorageFolder;
-        }
+        if (Config == null) return;
+        Config.SteamVrStorageFolder = ShowFolderDialog(Config.SteamVrStorageFolder);
+        TxtSteamVrStorageFolder.Text = Config.SteamVrStorageFolder;
     }
 
     private void BtnOpenVrDllFilePath_OnClick(object sender, RoutedEventArgs e)
     {
-        if (Config != null)
-        {
-            Config.OpenVrDllFilePath = ShowFileDialog(Config.OpenVrDllFilePath, "openvr_api.dll (openvr_api.dll)|openvr_api.dll");
-            TxtOpenVrDllFilePath.Text = Config.OpenVrDllFilePath;
-        }
+        if (Config == null) return;
+        Config.OpenVrDllFilePath = ShowFileDialog(Config.OpenVrDllFilePath, "openvr_api.dll (openvr_api.dll)|openvr_api.dll");
+        TxtOpenVrDllFilePath.Text = Config.OpenVrDllFilePath;
     }
 }

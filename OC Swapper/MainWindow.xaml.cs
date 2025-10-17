@@ -101,9 +101,9 @@ public partial class MainWindow
         
         SteamFileHash = config?.SteamFileHash;
         OpenCompositeFileHash = config?.OpenCompositeFileHash;
-        OpenVrDllFilePath = Path.Combine(AppContext.BaseDirectory, config!.OpenVrDllFilePath);
-        SteamVrStorageFolder = Path.Combine(AppContext.BaseDirectory, config.SteamVrStorageFolder, DllFileName);
-        OpenCompositeStorageFolder = Path.Combine(AppContext.BaseDirectory, config.OpenCompositeStorageFolder, DllFileName);
+        OpenVrDllFilePath = config!.OpenVrDllFilePath;
+        SteamVrStorageFolder = config.SteamVrStorageFolder;
+        OpenCompositeStorageFolder = config.OpenCompositeStorageFolder;
         LastRuntimeUsed = config.LastRuntimeUsed;
         AuthorWindowAvailable = config.AuthorWindowAvailable;
     }
@@ -265,6 +265,10 @@ public partial class MainWindow
         authorSettingsWindow.ShowDialog();
         
         // when the window is closed, we jump here
-        _openCompositeStorageFolder = authorSettingsWindow.Config.OpenCompositeStorageFolder;
+        _openCompositeStorageFolder = Path.GetRelativePath(AppContext.BaseDirectory, authorSettingsWindow.Config.OpenCompositeStorageFolder);
+        _steamVrStorageFolder = Path.GetRelativePath(AppContext.BaseDirectory, authorSettingsWindow.Config.SteamVrStorageFolder);
+        _openVrDllFilePath = Path.GetRelativePath(AppContext.BaseDirectory, authorSettingsWindow.Config.OpenVrDllFilePath);
+
+        SaveConfig();
     }
 }

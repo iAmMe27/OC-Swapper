@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="OC Swapper - Author Settings" Height="250" Width="550" Padding="20">
     <Grid Loaded="Window_Loaded">
-        <TextBox x:Name="TxtOpenVrDllFilePath" HorizontalAlignment="Left" Margin="187,20,0,0" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Width="250" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+        <TextBox Name="TxtOpenCompositeStorageFolder" HorizontalAlignment="Left" Margin="187,20,0,0" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Width="250" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
         <Label Content="Open Composite File Location:" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top"/>
-       
-        <TextBox Name="TxtOpenCompositeStorageFolder" HorizontalAlignment="Left" Margin="187,80,0,0" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Width="250" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+        
+        <TextBox x:Name="TxtSteamVrStorageFolder" HorizontalAlignment="Left" Margin="187,80,0,0" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Width="250" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
         <Label Content="Steam VR File Location:" HorizontalAlignment="Left" Margin="49,75,55,0" VerticalAlignment="Top"/>
        
-        <TextBox x:Name="TxtSteamVrStorageFolder" HorizontalAlignment="Left" Margin="187,140,0,0" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Width="250" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+        <TextBox x:Name="TxtOpenVrDllFilePath" HorizontalAlignment="Left" Margin="187,140,0,0" TextWrapping="NoWrap" Text="..." VerticalAlignment="Top" Width="250" IsReadOnly="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
         <Label Content="Path to DLL to swap:" HorizontalAlignment="Left" Margin="64,135,0,0" VerticalAlignment="Top"/>
        
         <Button x:Name="BtnOpenCompositeFileLocation" Content="Select" HorizontalAlignment="Left" Margin="442,20,0,0" VerticalAlignment="Top" Click="BtnOpenCompositeFileLocation_OnClick"/>
