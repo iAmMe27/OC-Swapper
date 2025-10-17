@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-
+using Microsoft.Win32;
 using OC_Swapper.Swapper.Configuration;
 
 namespace OC_Swapper;
@@ -27,5 +27,16 @@ public partial class AuthorSettings : Window
         
         TxtOpenVrDllFilePath.Text = Config?.OpenVrDllFilePath ?? "...";
         TxtOpenVrDllFilePath.ScrollToEnd();
+    }
+
+    public string ShowFileDialog(string initialDirectory, string filter)
+    {
+        var openFileDialog = new OpenFileDialog
+        {
+            InitialDirectory = initialDirectory,
+            Filter = filter
+        };
+
+        return openFileDialog.FileName;
     }
 }

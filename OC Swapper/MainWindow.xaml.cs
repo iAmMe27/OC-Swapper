@@ -110,11 +110,11 @@ public partial class MainWindow
 
     private void SaveConfig()
     {
-        // Only save the last used runtime as the rest of the config is not written 
-        // inside the program, only read
-        
         SwapperConfig config = new()
         {
+            OpenVrDllFilePath = _openVrDllFilePath,
+            SteamVrStorageFolder = _steamVrStorageFolder,
+            OpenCompositeStorageFolder = _openCompositeStorageFolder,
             LastRuntimeUsed = _lastRuntimeUsed ?? -1
         };
 
@@ -263,5 +263,8 @@ public partial class MainWindow
         };
 
         authorSettingsWindow.ShowDialog();
+        
+        // when the window is closed, we jump here
+        _openCompositeStorageFolder = authorSettingsWindow.Config.OpenCompositeStorageFolder;
     }
 }
