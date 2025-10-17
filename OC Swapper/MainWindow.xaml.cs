@@ -118,6 +118,8 @@ public partial class MainWindow
     {
         SwapperConfig config = new()
         {
+            SteamFileHash = _steamFileHash,
+            OpenCompositeFileHash = _openCompositeFileHash,
             OpenVrDllFilePath = _openVrDllFilePath,
             SteamVrStorageFolder = _steamVrStorageFolder,
             OpenCompositeStorageFolder = _openCompositeStorageFolder,
@@ -274,6 +276,10 @@ public partial class MainWindow
         _openCompositeStorageFolder = Path.GetRelativePath(AppContext.BaseDirectory, authorSettingsWindow.Config.OpenCompositeStorageFolder);
         _steamVrStorageFolder = Path.GetRelativePath(AppContext.BaseDirectory, authorSettingsWindow.Config.SteamVrStorageFolder);
         _openVrDllFilePath = Path.GetRelativePath(AppContext.BaseDirectory, authorSettingsWindow.Config.OpenVrDllFilePath);
+        
+        // hash DLLs in new file locations
+        _openCompositeFileHash = Hash.GetFileHash(_openCompositeFilePath);
+        _steamFileHash = Hash.GetFileHash(_steamVrFilePath);
 
         SaveConfig();
     }
